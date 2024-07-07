@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class SearchTableViewCell: UITableViewCell {
     
@@ -110,7 +111,16 @@ class SearchTableViewCell: UITableViewCell {
         self.releaseDate.configure(text: releaseDate)
         self.type.configure(text: type)
         if image != "NoImage", let imageURL = URL(string: image) {
-            self.image.load(from: imageURL, with: loader)
+            loader.startAnimating()
+            self.image.sd_setImage(with: imageURL, placeholderImage: nil, options: [], completed: { [weak self] (downloadedImage, error, cacheType, url) in
+                self?.loader.stopAnimating()
+                if let error = error {
+                    print("Failed to load image: \(error.localizedDescription)")
+                    self?.image.image = UIImage(named: "image")
+                } else {
+                    self?.image.image = downloadedImage
+                }
+            })
         } else {
             self.image.image = UIImage(named: image)
         }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class MovieCollectionViewCell: UICollectionViewCell {
     
@@ -50,7 +51,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupImage() {
-       
+        
         contentView.addSubview(loader)
         self.addSubview(image)
         
@@ -83,9 +84,18 @@ class MovieCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(title: String, image: String) {
-        self.itemTitle.text = title
+        itemTitle.text = title
         if image != "NoImage", let imageURL = URL(string: image) {
-            self.image.load(from: imageURL, with: loader)
+            loader.startAnimating()
+            self.image.sd_setImage(with: imageURL, placeholderImage: nil, options: [], completed: { [weak self] (downloadedImage, error, cacheType, url) in
+                self?.loader.stopAnimating()
+                if let error = error {
+                    print("Failed to load image: \(error.localizedDescription)")
+                    self?.image.image = UIImage(named: "image")
+                } else {
+                    self?.image.image = downloadedImage
+                }
+            })
         } else {
             self.image.image = UIImage(named: image)
         }

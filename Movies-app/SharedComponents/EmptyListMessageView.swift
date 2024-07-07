@@ -53,7 +53,7 @@ class EmptyListMessageView: UIView {
             messageTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             messageTitle.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             
-            messageText.topAnchor.constraint(equalTo: messageTitle.topAnchor, constant: 40),
+            messageText.topAnchor.constraint(equalTo: messageTitle.bottomAnchor, constant: 10),
             messageText.leadingAnchor.constraint(equalTo: messageTitle.leadingAnchor),
             messageText.trailingAnchor.constraint(equalTo: messageTitle.trailingAnchor),
         ])
